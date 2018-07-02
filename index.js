@@ -10,7 +10,7 @@ const express = require('express'),
   ExtractJwt = require('passport-jwt').ExtractJwt,
   jwt = require('jsonwebtoken'),
   socketIOJwt = require('socketio-jwt');
-
+require('dotenv').config();
 const User = require('./models/user');
 const { apiRouter, webRouter } = require('./routes');
 
@@ -49,6 +49,9 @@ passport.use(
 
 // Auth middleware
 app.use(passport.initialize());
+
+// set up socket server
+require('./socket-server')(io);
 
 // Start the server
 http.listen(process.env.PORT || 3000, () => {
