@@ -5,15 +5,15 @@ class Werewolf {
         this.votes = {};
 	}
 
-	addMember(member) {
-		this.memberList.push(member);
+	addMember(memberObj) {
+		this.memberList.push(memberObj);
 	}
 	
 	assignRolesToMembers() {
 		let numberOfWerewolves = Math.floor(this.memberList.length / 3);
 		let chosenIndexes = [];
 		for(let i = 0; i < numberOfWerewolves; i++) {
-			let randIndex = Math.floor(Math.random() * this.memberList.length); //Todo :Won't this sometimes return an index in ther array +1 to its length?
+			let randIndex = Math.floor(Math.random() * this.memberList.length); //Todo :Won't this sometimes return an index in the array +1 to its length?
 			if (!chosenIndexes.includes(randIndex)) {
 				chosenIndexes.push(randIndex);
 			} else {
@@ -45,14 +45,19 @@ class Werewolf {
 	}
 	
 	voteToKill(member) {
-		this.votes[member] = (this.votes[member] + 1 ) || 1;
+		this.votes[member] = this.votes[member] + 1  || 1;
 	}
 	
-	voteResults() {
+	voteTalley() {
 		// Analyze the votes object find the member with highest votes as value
 		// return the name of the member
 		// set the votes object to empty object for next round of voting
-		// check if game ends if this member is removed
+		// check if game ends if this member is removed 
+		for (
+	}
+
+	voteClear() {
+
 	}
 	
 	chooseVictim(member) {
