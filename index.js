@@ -12,7 +12,7 @@ const express = require('express'),
   socketIOJwt = require('socketio-jwt');
 
 const User = require('./models/user');
-const router = require('./routes');
+const { apiRouter, webRouter } = require('./routes');
 
 // Set up db connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/chat');
@@ -22,12 +22,13 @@ mongoose.Promise = Promise;
 app.use(express.static(path.resolve(__dirname, 'client')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/', router);
+app.use('/', webRouter);
+app.use('/api', apiRouter);
 
 // Strategy Configuration
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secret: process.env.SECRET || 'abdec96ef98215ab'
+  secretOrKey: process.env.SECRET || 'abdec96ef98215ab'
 };
 
 passport.use(
