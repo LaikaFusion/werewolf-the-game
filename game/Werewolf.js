@@ -1,29 +1,47 @@
 class Werewolf {
 	constructor() {
-		this.membersList = [];
-		this.votes = {};
+		this.memberList = [];
+		this.werewolfList = [];
+        this.votes = {};
 	}
-	
+
 	addMember(member) {
 		this.memberList.push(member);
 	}
 	
 	assignRolesToMembers() {
-		let numberOfWerewolves = Math.floor(this.members.length / 3);
+		let numberOfWerewolves = Math.floor(this.memberList.length / 3);
 		let chosenIndexes = [];
-		for(let i = 0; i < numberOfWerewolves.length; i++) {
-			let randIndex = Math.floor(Math.random() * this.members.length);
+		for(let i = 0; i < numberOfWerewolves; i++) {
+			let randIndex = Math.floor(Math.random() * this.memberList.length); //Todo :Won't this sometimes return an index in ther array +1 to its length?
 			if (!chosenIndexes.includes(randIndex)) {
 				chosenIndexes.push(randIndex);
 			} else {
 				i--;
 			}
-		}
+        }
+        this.werewolfList = chosenIndexes;
 		chosenIndexes.forEach(function(index) {
-			this.members[index].isWerewolf = true;
+            this.memberList[index].isWerewolf = true;
 		});
-		
-		// similarly choose a random healer and seer
+		//*Doctor Assignment
+		for (let i = 0; i < 1; i++) {
+			let doctorRandIndex = Math.floor(Math.random() * this.memberList.length);
+			if(this.memberList[doctorRandIndex].isWerewolf != true) {
+				this.memberList[doctorRandIndex].isDoctor = true;
+			} else {
+				i--;
+			}
+		}
+		//*Seer Assignment
+		for (let i =0; i < 1; i++) {
+			let seerRandIndex = Math.floor(Math.random() *thix.memberList.length);
+			if(this.memberList[seerRandIndex].isWerewolf != true && this.memberList[seerRandIndex].isDoctor != true) {
+				this.memberList[seerRandIndex].isSeer = true;
+			} else {
+				i--;
+			}
+		}
 	}
 	
 	voteToKill(member) {
@@ -54,6 +72,9 @@ class Werewolf {
 		// if the game has ended invoke the callback with the winner of the game
 	}
 }
+
+
+/// Game Loop
 
 
 function newGame(memberArray){
