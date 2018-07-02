@@ -3,19 +3,44 @@
   justify-content: center;
   align-items: center;
 }
+html,
 body {
+  background-color: #1F1E62 !important;
+  color: #ECE641;
+}
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #1F1E62;
+  color: #ECE641;
 }
 h1 {
   font-family: 'Eater', cursive !important;
-  color: #1F1E62 !important;
+  color: #ECE641 !important;
   text-align: center;
 }
 .landing-page {
   width: 1000px;
-  height: 1000px;
-  border: 2px solid black;
+  min-height: 1000px;
+  border: 2px solid #ECE641;
+  border-radius: 10px;
   margin: 0 auto;
+  flex-flow: column wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.theNight {
+  background-color: black;
+  color: white;
+  padding: 20px;
+}
+.theDay {
+  background-color: #ECE641 !important;
+  color: #1F1E62;
+  padding: 20px;
 }

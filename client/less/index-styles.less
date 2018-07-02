@@ -1,18 +1,44 @@
-body {
+html, body {
+    background-color: @first-color !important;
+    color: @second-color;
+}
+
+.container {
     .center;
+    background-color: @first-color;
+    color: @second-color;
 }
 
 h1 {
     font-family: @font-stack1 !important;
-    color: @first-color !important;
+    color: @second-color !important;
     text-align: center;
 }
 
 .landing-page {
     width: 1000px;
-    height: 1000px;
-    border: 2px solid black;
+    min-height: 1000px;
+    border: 2px solid @second-color;
+    border-radius: 10px;
     margin: 0 auto;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    .center;
+}
+
+.theNight {
+    background-color: black;
+    color: white;
+    padding: 20px;
+}
+
+.theDay {
+    background-color: @second-color !important;
+    color: @first-color;
+    padding: 20px;
 }
 
 
