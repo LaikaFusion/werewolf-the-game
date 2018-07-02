@@ -1,8 +1,11 @@
 class Werewolf {
 	constructor() {
 		this.memberList = [];
-		this.werewolfList = [];
+        this.werewolfList = [];
+        this.villagerList = [];
         this.votes = {};
+        this.doctor = ""; 
+        this.seer = "";
 	}
 
 	addMember(memberObj) {
@@ -20,35 +23,46 @@ class Werewolf {
 				i--;
 			}
         }
+        
         this.werewolfList = chosenIndexes;
 		chosenIndexes.forEach(function(index) {
             this.memberList[index].isWerewolf = true;
-		});
+        });
+        
+        this.memberList.forEach(element => {
+            if(element.isWerewolf != true){
+                this.villagerList.push(element);
+            }
+        });
+
 		//*Doctor Assignment
 		for (let i = 0; i < 1; i++) {
 			let doctorRandIndex = Math.floor(Math.random() * this.memberList.length);
 			if(this.memberList[doctorRandIndex].isWerewolf != true) {
-				this.memberList[doctorRandIndex].isDoctor = true;
+                this.memberList[doctorRandIndex].isDoctor = true;
+                this.doctor= memberList[doctorRandIndex].name;
 			} else {
 				i--;
 			}
 		}
 		//*Seer Assignment
 		for (let i =0; i < 1; i++) {
-			let seerRandIndex = Math.floor(Math.random() *thix.memberList.length);
+			let seerRandIndex = Math.floor(Math.random() *this.memberList.length);
 			if(this.memberList[seerRandIndex].isWerewolf != true && this.memberList[seerRandIndex].isDoctor != true) {
-				this.memberList[seerRandIndex].isSeer = true;
+                this.memberList[seerRandIndex].isSeer = true;
+                this.seer= memberList[seerRandIndex].name;
+
 			} else {
 				i--;
 			}
 		}
 	}
 	
-	voteToKill(playerName) {
+	voteAdding(playerName) {
 		this.votes[playerName] = this.votes[playerName] + 1  || 1;
 	}
 	
-	voteTalley() {
+	voteTalley(cb) {
 		// Analyze the votes object find the member with highest votes as value
 		// return the name of the member
 		// set the votes object to empty object for next round of voting
@@ -58,105 +72,116 @@ class Werewolf {
 		for (let [key, value] of Object.entries(this.vote)) {
 			if (value > currentHighestVote) {currentLeader = key;}
 		}
-		return currentLeader;
+		cb(currentLeader) ;
     }
     
 	voteClear() {
 		this.votes = {};
 	}
 	
-	chooseVictim(victim) {
-		// remove this member from the array
-        // check if the game has ended
-        for (i = 0; i < this.memberList.length; i++) {
-            if (victim === this.memberList[i]) {
-                target = this.memberList[i];
-                targetIndex = i;
-            }
+	chooseVictim(victimName,callback) {
+		for (let index = 0; index < this.memberList.length; index++) {
+            if(this.memberList[i].name === victimName){
+                if(this.memberList[i].protected === true){
+                    callback(`Someone has been saved`);
+                    break;
+                }
+                else{
+                    if(victimName === this.doctor){
+                        this.doctor = "";
+                    }
+                    if(victimName === this.seer){
+                        this.seer = "";
+                    }
+                    callback(this.memberList.splice(index,1));
+
+                    break;
+                }
+            }   
         }
 	}
 	
-	protectPlayer(protected) {
-        // set the member.protected = true, on next kill set protected to false for all members
-        if (protected === target) {
-            return `The Doctor has saved ${target}'s life!'`
-        } else {
-            this.memberList.splice(targetIndex,1);
-            if (target.isWerewolf = true) {
-                remainingWerewolves -= 1;
-            } else {
-                remainingVillagers -=1;
+	protectPlayer(protectedName) {
+        for (let index = 0; index < this.memberList.length; index++) {
+            if(this.memberList[i].name  === protectedName){
+                this.memberList[i].protected = true;
             }
-        }
-	}
-	
-	queryWerewolfStatus(player) {
+	    }
+    }
+    removeProtection(protectedName){
+        for (let index = 0; index < this.memberList.length; index++) {
+            if(this.memberList[i].name  === protectedName){
+                this.memberList[i].protected = undefined;
+            }
+	    }
+    }
+    
+	queryWerewolfStatus(playerObj,callback) {
         // straight forward return member.isWerewolf
-        if (player.isWerewolf = true) {
-            return `Beware! ${player} is a werewolf!`
+        if (playerObj.isWerewolf = true) {
+            callback(true);
         } else {
-            return `${player} is not a werewolf.`
+            callback(false);
         }
 	}
 	
 	endGame(callback) { //todo Why does this need a callback?
-        if (remainingVillagers = remainingWerewolves) {
-            return "The werewolves have won!"
-        } else if (remainingWerewolves = 0) {
-            return "The villagers have won!"
-        }		// if the game has ended invoke the callback with the winner of the game
+        if (werewolfList.length === villagerList.length) {
+            callback(`Werewolf Win`)
+        } 
+        else if (werewolfList.length === 0) {
+            callback(`Villager Win`)
+        }
+        else{
+            callback('No winner yet')
+        }
+    
     }
-    removeProtection(){
-        target = undefined;
-        targetIndex = undefined;
-    }
+   
 }
 
 //*GLOBAL VARIABLES
-let target;
-let targetIndex;
-let remainingVillagers = this.memberList.length;
-let remainingWerewolves = this.werewolfList.length;
+
 
 
 /// Game Loop
 
 
-function newGame(memberArray){
+// function newGame(memberArray){
 
-    let game = new Werewolf();
+//     let game = new Werewolf();
 
-    memberArray.forEach(element => {
-        game.addMember(element);
-    });
+//     memberArray.forEach(element => {
+//         game.addMember(element);
+//     });
     
-    game.assignRolesToMembers();
+//     game.assignRolesToMembers();
 
-    console.log(`Member list populated`);
+//     console.log(`Member list populated`);
 
-    game.membersList.forEach(element => {
-        if(element.isWerewolf=== true){
-            rolePasser("werewolf",element);
-        }
-        else if(element.isDoctor === true){
-            rolePasser("doctor",element);
-        }
-        else if (element.isSeer === true){
-            rolePasser("seer",element);
-        }
-        else{
-            rolePasser("villager", element);
-        }
-    });
+//     game.membersList.forEach(element => {
+//         if(element.isWerewolf=== true){
+//             rolePasser("werewolf",element);
+//         }
+//         else if(element.isDoctor === true){
+//             rolePasser("doctor",element);
+//         }
+//         else if (element.isSeer === true){
+//             rolePasser("seer",element);
+//         }
+//         else{
+//             rolePasser("villager", element);
+//         }
+//     });
   
 
 
-}
+// }
 
-function rolePasser(role,member){
-    //Will pass the role back to the member 
-    console.log(`Your role is ${role}`);
-}
+// function rolePasser(role,member){
+//     //Will pass the role back to the member 
+//     console.log(`Your role is ${role}`);
+// }
 
 function night(gameObj){
     let victim; 
@@ -187,7 +212,6 @@ function night(gameObj){
         console.log("All werewolves must vote ")
     }
     
-    doctor(gameObj,victim);
 
    
    
