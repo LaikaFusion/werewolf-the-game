@@ -159,11 +159,14 @@ function rolePasser(role,member){
 }
 
 function night(gameObj){
-    let victim ; 
+    let victim; 
     //start is a werewolf vote
     console.log("Werewolves please vote, you have thirt seconds. Failure to vote unanimously will end with no kills.");
     //start vote timer here: need to figure out a way to skip on (idea: split functions more)
-    setTimeout(function(){ console.log("Times up!") }, 30000);
+    setTimeout(function(){ console.log("Times up!") 
+    doctor(gameObj,victim);
+},
+ 30000);
     //recieve votes here and call bellow
     gameObj.voteToKill(memberVotedFor);
     //return an indication of who the other players has voted for
@@ -183,7 +186,16 @@ function night(gameObj){
     else{
         console.log("All werewolves must vote ")
     }
-    //next is doctors turn 
+    
+    doctor(gameObj,victim);
+
+   
+   
+    
+}
+
+function doctor(gameObj,victim){
+//next is doctors turn 
     //todo: check if doctor is still alive
     console.log("Doctor, you're up!")
     //aquire doctor's pick here
@@ -197,12 +209,24 @@ function night(gameObj){
     }
     //remove protection
     gameObj.removeProtection(docVote);
-    //check if werewolves have won
+    winCheck(gameObj);
+    
+}
+ //check if werewolves have won
+function winCheck(gameObj){
     const gameWon = gameObj.hasWon();
     
     if (gameWon === true){
         gameObj.endGame();
     }
+    else{
+        seer(gameObj);
+    }
+
+}
+
+
+function seer(gameObj){
     //if game hasn't been won seer's turn 
     //todo: check if seer is alive
     console.log("Seer it's your turn!");
@@ -216,6 +240,7 @@ function night(gameObj){
     }
     day(gameObj);
 }
+
 
 //all that's really done during the day is allowing all the players to vote to kill
 function day(gameObj){
