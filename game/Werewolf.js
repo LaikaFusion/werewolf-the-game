@@ -90,8 +90,13 @@ class Werewolf {
         }
 	}
 	
-	queryWerewolfStatus(member) {
-		// straight forward return member.isWerewolf
+	queryWerewolfStatus(player) {
+        // straight forward return member.isWerewolf
+        if (player.isWerewolf = true) {
+            return `Beware! ${member} is a werewolf!`
+        } else {
+            return `${member}`
+        }
 	}
 	
 	endGame(callback) {
