@@ -9,9 +9,9 @@ body {
   align-items: center;
 }
 h1 {
-  font-family: 'Helvetica';
-  font-size: 200px;
-  color: red;
+  font-family: 'Eater', cursive !important;
+  color: #1F1E62 !important;
+  text-align: center;
 }
 .landing-page {
   width: 1000px;
