@@ -70,7 +70,10 @@ class Werewolf {
 	
 	endGame(callback) {
 		// if the game has ended invoke the callback with the winner of the game
-	}
+    }
+    removeProtection(memberName){
+
+    }
 }
 
 
@@ -80,7 +83,7 @@ class Werewolf {
 function newGame(memberArray){
 
     let game = new Werewolf();
-    
+
     memberArray.forEach(element => {
         game.addMember(element);
     });
@@ -112,3 +115,67 @@ function rolePasser(role,member){
     //Will pass the role back to the member 
     console.log(`Your role is ${role}`);
 }
+
+function night(gameObj){
+    let victim ; 
+    //start is a werewolf vote
+    console.log("Werewolves please vote, you have thirt seconds. Failure to vote unanimously will end with no kills.");
+    //start vote timer here: need to figure out a way to skip on (idea: split functions more)
+    setTimeout(function(){ console.log("Times up!") }, 30000);
+    //recieve votes here
+    gameObj.voteToKill(memberVotedFor);
+    //return an indication of who the other players has voted for
+    //count number of returned votes 
+    if(returnedVotes === gameObj.werewolfList.length){
+        const voteReturn = gameObj.voteResults();
+            if (voteReturn==="tie") {
+                console.log("Tie votes will result in no death");
+            }
+            else{
+                //no death call here because we need to check if the doctor has added protection first
+                victim = voteReturn;
+                gambeObj.voteClear();
+
+            }
+    }
+    else{
+        console.log("All werewolves must vote ")
+    }
+    //next is doctors turn 
+    //todo: check if doctor is still alive
+    console.log("Doctor, you're up!")
+    //aquire doctor's pick here
+    gameObj.protectPlayer(docVote);
+
+    if (gameObj.memberList.protectPlayer === false){
+        gameObj.chooseVictim(victim);
+    }
+    else{
+        //todo: add message for day reading
+    }
+    //remove protection
+    gameObj.removeProtection(docVote);
+    //check if werewolves have won
+    const gameWon = gameObj.hasWon();
+    
+    if (gameWon === true){
+        gameObj.endGame();
+    }
+    //if game hasn't been won seer's turn 
+    //todo: check if seer is alive
+    console.log("Seer it's your turn!");
+    //get seer check request
+    const seerCheck = gameObj.queryWerewolfStatus(seerRequest);
+    if (seerCheck === true){
+        console.log( `${seerRandIndex} is a werewolf!`);
+    }
+    else {
+        console.log(`${seerCheck} is not a werewolf`)
+    }
+    day(gameObj);
+}
+
+function day(gameObj){
+
+}
+
