@@ -93,17 +93,22 @@ class Werewolf {
 	queryWerewolfStatus(player) {
         // straight forward return member.isWerewolf
         if (player.isWerewolf = true) {
-            return `Beware! ${member} is a werewolf!`
+            return `Beware! ${player} is a werewolf!`
         } else {
-            return `${member}`
+            return `${player} is not a werewolf.`
         }
 	}
 	
-	endGame(callback) {
-		// if the game has ended invoke the callback with the winner of the game
+	endGame(callback) { //todo Why does this need a callback?
+        if (remainingVillagers = remainingWerewolves) {
+            return "The werewolves have won!"
+        } else if (remainingWerewolves = 0) {
+            return "The villagers have won!"
+        }		// if the game has ended invoke the callback with the winner of the game
     }
-    removeProtection(memberName){
-
+    removeProtection(){
+        target = undefined;
+        targetIndex = undefined;
     }
 }
 
