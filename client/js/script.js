@@ -4,6 +4,7 @@ socket.on('connect', () => {
   socket
     .on('authenticated', () => {
       console.log('authentication successful');
+      socket.on('Go home', console.log);
     })
     .emit('authenticate', {
       token:
@@ -11,3 +12,7 @@ socket.on('connect', () => {
     })
     .on('error', console.log);
 });
+
+function sendEvent(event, data) {
+  socket.emit(event, data);
+}
