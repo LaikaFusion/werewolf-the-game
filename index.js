@@ -10,9 +10,9 @@ const express = require('express'),
   ExtractJwt = require('passport-jwt').ExtractJwt,
   jwt = require('jsonwebtoken'),
   socketIOJwt = require('socketio-jwt');
-
+require('dotenv').config();
 const User = require('./models/user');
-const router = require('./routes');
+const { apiRouter, webRouter } = require('./routes');
 
 // Set up db connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/chat');
@@ -22,12 +22,13 @@ mongoose.Promise = Promise;
 app.use(express.static(path.resolve(__dirname, 'client')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/', router);
+app.use('/', webRouter);
+app.use('/api', apiRouter);
 
 // Strategy Configuration
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secret: process.env.SECRET || 'abdec96ef98215ab'
+  secretOrKey: process.env.SECRET || 'abdec96ef98215ab'
 };
 
 passport.use(
@@ -48,6 +49,9 @@ passport.use(
 
 // Auth middleware
 app.use(passport.initialize());
+
+// set up socket server
+require('./socket-server')(io);
 
 // Start the server
 http.listen(process.env.PORT || 3000, () => {
