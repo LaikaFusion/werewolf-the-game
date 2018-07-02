@@ -44,8 +44,8 @@ class Werewolf {
 		}
 	}
 	
-	voteToKill(member) {
-		this.votes[member] = this.votes[member] + 1  || 1;
+	voteToKill(playerName) {
+		this.votes[playerName] = this.votes[playerName] + 1  || 1;
 	}
 	
 	voteTalley() {
@@ -59,20 +59,35 @@ class Werewolf {
 			if (value > currentHighestVote) {currentLeader = key;}
 		}
 		return currentLeader;
-	}
+    }
+    
 	voteClear() {
-		for (let [key, value] of Object.entries(this.vote)) {
-            value = 0;
+		this.votes = {};
+	}
+	
+	chooseVictim(victim) {
+		// remove this member from the array
+        // check if the game has ended
+        for (i = 0; i < this.memberList.length; i++) {
+            if (victim === this.memberList[i]) {
+                target = this.memberList[i];
+                targetIndex = i;
+            }
         }
 	}
 	
-	chooseVictim(member) {
-		// remove this member from the array
-		// check if the game has ended
-	}
-	
-	protectPlayer(member) {
-		// set the member.protected = true, on next kill set protected to false for all members
+	protectPlayer(protected) {
+        // set the member.protected = true, on next kill set protected to false for all members
+        if (protected === target) {
+            return `The Doctor has saved ${target}'s life!'`
+        } else {
+            this.memberList.splice(targetIndex,1);
+            if (target.isWerewolf = true) {
+                remainingWerewolves -= 1;
+            } else {
+                remainingVillagers -=1;
+            }
+        }
 	}
 	
 	queryWerewolfStatus(member) {
@@ -86,6 +101,12 @@ class Werewolf {
 
     }
 }
+
+//*GLOBAL VARIABLES
+let target;
+let targetIndex;
+let remainingVillagers = this.memberList.length;
+let remainingWerewolves = this.werewolfList.length;
 
 
 /// Game Loop
