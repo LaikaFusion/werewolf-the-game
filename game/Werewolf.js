@@ -53,11 +53,17 @@ class Werewolf {
 		// return the name of the member
 		// set the votes object to empty object for next round of voting
 		// check if game ends if this member is removed 
-	
+		let currentHighestVote = 0;
+		let currentLeader = "";
+		for (let [key, value] of Object.entries(this.vote)) {
+			if (value > currentHighestVote) {currentLeader = key;}
+		}
+		return currentLeader;
 	}
-
 	voteClear() {
-
+		for (let [key, value] of Object.entries(this.vote)) {
+            value = 0;
+        }
 	}
 	
 	chooseVictim(member) {
