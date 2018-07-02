@@ -53,7 +53,7 @@ class Werewolf {
 		// return the name of the member
 		// set the votes object to empty object for next round of voting
 		// check if game ends if this member is removed 
-		for (
+	
 	}
 
 	voteClear() {
@@ -127,12 +127,12 @@ function night(gameObj){
     console.log("Werewolves please vote, you have thirt seconds. Failure to vote unanimously will end with no kills.");
     //start vote timer here: need to figure out a way to skip on (idea: split functions more)
     setTimeout(function(){ console.log("Times up!") }, 30000);
-    //recieve votes here
+    //recieve votes here and call bellow
     gameObj.voteToKill(memberVotedFor);
     //return an indication of who the other players has voted for
     //count number of returned votes 
     if(returnedVotes === gameObj.werewolfList.length){
-        const voteReturn = gameObj.voteResults();
+        const voteReturn = gameObj.voteTalley();
             if (voteReturn==="tie") {
                 console.log("Tie votes will result in no death");
             }
@@ -180,7 +180,27 @@ function night(gameObj){
     day(gameObj);
 }
 
+//all that's really done during the day is allowing all the players to vote to kill
 function day(gameObj){
+//todo: need to announce if someone has been saved at the beginning of the day
+
+//recieve votes here
+gameObj.voteToKill(memberVotedFor);
+//return number of people voted so far to clients
+
+if(returnedVotes === gameObj.memberList.length){
+    const voteReturn = gameObj.voteTalley();
+        if (voteReturn==="tie") {
+            console.log("Tie votes will result in no death");
+        }
+        else{
+            
+            gameObj.chooseVictim(voteReturn);
+            gambeObj.voteClear();
+
+        }
+}
+
 
 }
 
