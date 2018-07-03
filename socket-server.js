@@ -39,7 +39,7 @@ function socketServer(io) {
       socket.on('new game', async name => {
         let newGame = new Werewolf();
         newGame.endGameCallback = endTheGame.bind(newGame);
-
+        newGame.addMember({ name: socket.username });
         let gameData = {
           id: uuid(),
           game: newGame,
@@ -59,7 +59,6 @@ function socketServer(io) {
       });
 
       socket.on('invite member', name => {
-        console.log(users);
         if (users[name]) {
           let gameId = users[socket.username].currentGame;
           users[name].sockets.forEach(sock => {
@@ -70,6 +69,9 @@ function socketServer(io) {
 
       socket.on('join game', gameId => {
         socket.join(gameId);
+        let gameObj = games.find(game => game.id === gameId);
+        gameObj.participants.push(socket.username);
+        gameObj.game.addMember({ name: socket.username });
         io.to(gameId).emit(
           'message',
           `${socket.username} has joined the game!`
@@ -92,8 +94,10 @@ function socketServer(io) {
       });
 
       socket.on('assign roles', () => {
-        newGame.assignRolesToMembers();
-        console.log(newGame.memberList);
+        let gameId = users[socket.username].currentGame;
+        let gameObj = games.find(game => game.id === gameId).game;
+        gameObj.assignRolesToMembers();
+        console.log(gameObj);
       });
 
       socket.on('vote tally', () => {

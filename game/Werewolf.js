@@ -65,7 +65,7 @@ class Werewolf {
     this.votes[playerName] = this.votes[playerName] + 1 || 1;
   }
 
-  voteTalley(cb) {
+  voteTalley() {
     // Analyze the votes object find the member with highest votes as value
     // return the name of the member
     // set the votes object to empty object for next round of voting
@@ -78,7 +78,7 @@ class Werewolf {
         currentLeader = key;
       }
     }
-    cb(currentLeader);
+    return currentLeader;
   }
 
   voteClear() {
