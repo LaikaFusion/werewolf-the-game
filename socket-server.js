@@ -1,26 +1,10 @@
 const socketIOJwt = require('socketio-jwt');
 const User = require('./models/user');
+const uuid = require('uuid/v1');
 const Werewolf = require('./game/Werewolf');
 const users = {};
-// const games = [];
+const games = [];
 function socketServer(io) {
-  const newGame = new Werewolf({
-    endGameCallback: endTheGame
-  });
-  newGame.memberList = [
-    { name: 0.162276533350459 },
-    { name: 0.17786169229235882, isWerewolf: true },
-    { name: 0.6341217339917959, isDoctor: true },
-    { name: 0.628045600139415 },
-    { name: 0.8504834046117196, isWerewolf: true },
-    { name: 0.21137416164253042 },
-    { name: 0.9661571781264835, isSeer: true }
-  ];
-  newGame.votes = {
-    '0.628045600139415': 4,
-    '0.162276533350459': 2,
-    '0.21137416164253042': 1
-  };
   io.sockets
     .on(
       'connection',
@@ -34,7 +18,6 @@ function socketServer(io) {
       // Identify the user associated with this socket
       try {
         let user = await User.findById(socket.decoded_token.id);
-        console.log(user);
         socket.username = user.username;
         console.log(
           `${socket.username} has connected through socket ${socket.id}`
@@ -47,21 +30,52 @@ function socketServer(io) {
         } else {
           users[socket.username].sockets = [socket.id];
         }
-        console.log(users);
       } catch (err) {
         console.log(err);
       }
 
       socket.on('message', console.log);
 
-      socket.on('new game', name => {
-        games.push = new Werewolf();
+      socket.on('new game', async name => {
+        let newGame = new Werewolf();
+        newGame.endGameCallback = endTheGame.bind(newGame);
+
+        let gameData = {
+          id: uuid(),
+          game: newGame,
+          name,
+          messages: [],
+          owner: socket.username,
+          participants: [socket.username]
+        };
+        games.push(gameData);
+        users[socket.username].currentGame = gameData.id;
+        socket.join(gameData.id);
         console.log(`new game created: ${name}`);
       });
 
-      socket.on('add member', name => {
-        newGame.addMember(name);
-        console.log(newGame.memberList);
+      socket.on('get online users', cb => {
+        cb(Object.keys(users));
+      });
+
+      socket.on('invite member', name => {
+        console.log(users);
+        if (users[name]) {
+          let gameId = users[socket.username].currentGame;
+          users[name].sockets.forEach(sock => {
+            io.to(sock).emit('invitation to join', gameId);
+          });
+        }
+      });
+
+      socket.on('join game', gameId => {
+        socket.join(gameId);
+        io.to(gameId).emit(
+          'message',
+          `${socket.username} has joined the game!`
+        );
+        users[socket.username].currentGame = gameId;
+        console.log(users);
       });
 
       socket.on('assign roles', () => {
@@ -97,7 +111,7 @@ function socketServer(io) {
       });
     });
   function endTheGame(winnerStr) {
-    io.emit('Go home', 'like seriously ' + winnerStr);
+    io.to(this.gameId).emit('Go home', 'like seriously ' + winnerStr);
     console.log("Game's over go home!", winnerStr);
   }
 }

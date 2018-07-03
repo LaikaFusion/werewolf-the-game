@@ -6,7 +6,7 @@ class Werewolf {
     this.votes = {};
     this.doctor = '';
     this.seer = '';
-    this.endGameCallback = options.endGameCallback;
+    this.endGameCallback = () => {};
   }
 
   addMember(memberObj) {

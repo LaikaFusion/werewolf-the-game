@@ -1,18 +1,23 @@
 let socket = io('/');
 
 socket.on('connect', () => {
+  console.log('connected');
   socket
     .on('authenticated', () => {
       console.log('authentication successful');
       socket.on('Go home', console.log);
     })
-    .emit('authenticate', {
-      token:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViMzkzN2Q1OTA2MDhmMDM0YjcwMjk0NyIsImlhdCI6MTUzMDU2NjM1OX0.ESTEPUI9RUiwWWAIbL8kPiaF9fiYe2OGie3pQVwgE44'
-    })
+    .on('invitation to join', console.log)
+    .on('message', console.log)
     .on('error', console.log);
 });
 
 function sendEvent(event, data) {
   socket.emit(event, data);
+}
+
+function authenticate(token) {
+  socket.emit('authenticate', {
+    token
+  });
 }
