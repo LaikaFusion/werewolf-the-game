@@ -22,8 +22,8 @@ mongoose.Promise = Promise;
 app.use(express.static(path.resolve(__dirname, 'client')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/', webRouter);
 app.use('/api', apiRouter);
+app.use('/', webRouter);
 
 // Strategy Configuration
 const jwtOptions = {

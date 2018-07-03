@@ -30,6 +30,7 @@ function socketServer(io) {
         } else {
           users[socket.username].sockets = [socket.id];
         }
+        io.emit('online users update', Object.keys(users));
       } catch (err) {
         console.log(err);
       }
