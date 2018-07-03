@@ -78,7 +78,7 @@
                 .removeClass('text-danger')
                 .addClass('text-success')
                 .text(data.message);
-              sessionStorage.setItem('token', `Bearer ${data.token}`);
+              sessionStorage.setItem('token', data.token);
               profileLink.show();
             }
           })

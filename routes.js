@@ -89,6 +89,20 @@ webRouter.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
 });
 
+webRouter.get('/register', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'register.html'));
+});
+
+webRouter.get('/login', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'login.html'));
+});
+
+webRouter.get('/logout', (req, res) => res.redirect('/login'));
+
+webRouter.get('*', (req, res) => {
+  res.status(404).send('Page not found');
+});
+
 module.exports = {
   apiRouter,
   webRouter

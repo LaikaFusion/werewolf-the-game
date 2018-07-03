@@ -2,6 +2,7 @@ let socket = io('/');
 
 socket.on('connect', () => {
   console.log('connected');
+  authenticate(sessionStorage.getItem('token'));
   socket
     .on('authenticated', () => {
       console.log('authentication successful');
@@ -22,4 +23,8 @@ function authenticate(token) {
   });
 }
 
-
+$(function() {
+  $('#logout').click(() => {
+    sessionStorage.setItem('token', '');
+  });
+});

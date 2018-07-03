@@ -2,67 +2,89 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Werewolf Game</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="css/index.css" />
-    <script src="index.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Eater|Oswald" rel="stylesheet">
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-        integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-        crossorigin="anonymous">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Werewolf Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Eater|Oswald" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+    crossorigin="anonymous">
+  <style>
+    body {
+      background-color: #1F1E62;
+      color: #ECE641;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: 'Eater', cursive;
+    }
+
+    .chatRow>div {
+      border: 1px solid #ece641;
+    }
+
+    .chatRow {
+      height: 70vh;
+    }
+
+    .btn {
+      background-color: #ECE641;
+      color: #1F1E62;
+      font-family: 'Eater', cursive;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="row welcomeRow">
-            <div class="col-12">
-                <h1 id="WelcomeTitle">Welcome</h1>
-                <p>Here you will communicate with your teammates and cast your vote</p>
-            </div>
-        </div>
+  <div class="container">
 
-        <div class="row chatRow">
-            <div class="col-4 conversationsList">
-
-            </div>
-            <div class="col-8 chatBox">
-
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username"
-                        aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button">Send to Global</button>
-                        <button class="btn btn-outline-secondary" type="button">Send to Werewolves</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="">
-                <button id="newGameButton" class="btn btn-outline-secondary" type="button">New Game</button>
-            </div>
-            <div class="">
-                <button id="joinGameButton" class="btn btn-outline-secondary" type="button">Join Game</button>
-                <input type="text" class="form-control" placeholder="Game Name" id="joinGameID">
-            </div>
-            <div class="">
-
-            </div>
-        </div>
+    <div class="row welcomeRow text-center">
+      <div class="col-12">
+        <h1 id="WelcomeTitle">Welcome</h1>
+        <h2 id="name"></h2>
+        <p>Here you will communicate with your teammates and cast your vote</p>
+      </div>
     </div>
-    <!-- Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
-        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-        crossorigin="anonymous"></script>
-    <script src="js/button.js"></script>
+
+    <div class="row my-3 justify-content-between">
+      <form class="form-inline" id="newGameForm">
+        <input class="form-control mr-2" id="newGameName" type="text" placeholder="Enter a name">
+        <button type="submit" class="btn">New Game</button>
+      </form>
+      <div>
+        <a id="logout" href="/logout" class="btn">Logout</a>
+      </div>
+    </div>
+
+    <div class="row chatRow">
+      <div id="conversationList" class="col-4 conversationsList">
+
+      </div>
+      <div class="col-8">
+
+        <div id="chatbox">
+
+        </div>
+      </div>
+    </div>
+    <div class="row bg-success"></div>
+  </div>
+  <!-- Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+    crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/script.js"></script>
+  <!-- <script src="js/button.js"></script> -->
 
 </body>
 
