@@ -59,6 +59,7 @@ input:valid {
 .welcomeRow p {
   color: #ECE641 !important;
   font-family: 'Oswald', sans-serif !important;
+  font-size: 18px;
 }
 .welcomeRow {
   text-align: center;
@@ -72,6 +73,20 @@ input:valid {
   border: 1px solid #ECE641 !important;
   height: 600px;
   width: 600px;
+}
+.chatBox h4 {
+  color: #ECE641;
+  font-family: 'Oswald', sans-serif !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chatBox .btn {
+  color: #1F1E62 !important;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
 }
 h1 {
   font-family: 'Eater', cursive !important;
