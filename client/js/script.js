@@ -10,6 +10,7 @@ socket.on('connect', () => {
     })
     .on('invitation to join', onInvitationToJoin)
     .on('online users update', onUserUpdate)
+    .on('new participant', onParticipantUpdate)
     .on('message', console.log)
     .on('error', console.log);
 });
@@ -35,6 +36,24 @@ $(function() {
     });
   });
 
+  $('#gameInvitations').on('click', 'button', function() {
+    sendEvent('join game', $(this).data('id'));
+    $(this).remove();
+  });
+
+  $('#newGameForm').on('submit', function(e) {
+    e.preventDefault();
+    sendEvent('new game', $('#newGameName').val());
+    $('#gameName').text($('#newGameName').val());
+    $('#newGameName').val('');
+  });
+
+  $('#inviteForm').on('submit', function(e) {
+    e.preventDefault();
+    sendEvent('invite member', $('#memberInvite').val());
+    $('#memberInvite').val('');
+  });
+
   $.get({
     url: '/api/profileInfo',
     headers: {
@@ -47,10 +66,20 @@ $(function() {
     .catch(console.log);
 });
 
-function onInvitationToJoin(gameId) {}
+function onInvitationToJoin({ gameId, from }) {
+  $('<button>')
+    .data('id', gameId)
+    .addClass('btn')
+    .text(`Join ${from}`)
+    .appendTo($('#gameInvitations'));
+}
 
 function onUserUpdate(list) {
   list.forEach(user => {
     $('#onlineusesr').append(`<p>${user}</p>`);
   });
+}
+
+function onParticipantUpdate(list) {
+  $('#participants').text(`${list}`);
 }

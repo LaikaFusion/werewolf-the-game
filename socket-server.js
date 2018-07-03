@@ -50,7 +50,7 @@ function socketServer(io) {
           participants: [socket.username]
         };
         games.push(gameData);
-        users[socket.username].currentGame = gameData.id;
+        users[socket.username].currentGame = gameData;
         socket.join(gameData.id);
         console.log(`new game created: ${name}`);
       });
@@ -61,9 +61,12 @@ function socketServer(io) {
 
       socket.on('invite member', name => {
         if (users[name]) {
-          let gameId = users[socket.username].currentGame;
+          let gameId = users[socket.username].currentGame.id;
           users[name].sockets.forEach(sock => {
-            io.to(sock).emit('invitation to join', gameId);
+            io.to(sock).emit('invitation to join', {
+              gameId,
+              from: socket.username
+            });
           });
         }
       });
@@ -73,11 +76,8 @@ function socketServer(io) {
         let gameObj = games.find(game => game.id === gameId);
         gameObj.participants.push(socket.username);
         gameObj.game.addMember({ name: socket.username });
-        io.to(gameId).emit(
-          'message',
-          `${socket.username} has joined the game!`
-        );
-        users[socket.username].currentGame = gameId;
+        io.to(gameId).emit('new participant', gameObj.participants);
+        users[socket.username].currentGame = gameObj;
         console.log(users);
       });
 

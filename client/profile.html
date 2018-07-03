@@ -65,13 +65,24 @@
 
     <div class="row chatRow">
       <div id="conversationList" class="col-4 conversationsList py-2">
-        <p id="gameName">Ash</p>
+        <p>Game:
+          <span id="gameName"></span>
+        </p>
+        <p>Participants:
+          <span id="participants"></span>
+        </p>
         <form class="form-inline mb-3" id="inviteForm">
-          <input class="form-control mr-2" id="newGameName" type="text" placeholder="Enter a name">
+          <input class="form-control mr-2" id="memberInvite" type="text" placeholder="Enter a name">
           <button type="submit" class="btn">Invite</button>
         </form>
+        <button class="btn" id="startGame">Start Game</button>
         <div id="onlineusers">
           <h5>Online users</h5>
+        </div>
+
+        <div id="gameInvitations">
+          <h5>Game Invitations</h5>
+          <!-- <button data-id="angoansd" class="btn">Join ashwin</button> -->
         </div>
       </div>
       <div class="col-8">
