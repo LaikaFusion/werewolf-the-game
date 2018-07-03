@@ -5,6 +5,7 @@ const passport = require('passport');
 const apiRouter = express.Router();
 const webRouter = express.Router();
 const secret = process.env.SECRET || 'abdec96ef98215ab';
+const path = require('path');
 
 // API
 // Protected API Get Routes
@@ -82,6 +83,11 @@ apiRouter.post('/login', async (req, res) => {
     });
   }
 }); // login
+
+// Webroutes
+webRouter.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
+});
 
 module.exports = {
   apiRouter,
