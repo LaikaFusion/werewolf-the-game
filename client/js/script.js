@@ -59,11 +59,10 @@ $(function() {
 
   $('#sendMessages').on('submit', function(e) {
     e.preventDefault();
-    let recepients = $('#to')
-      .val()
-      .split(',');
+    let recepients = $('#to').val();
     console.log(recepients);
     if (recepients === '') recepients = undefined;
+    else recepients = recepients.split(',');
     sendEvent('message', { recepients, message: $('#message').val() });
     $('#message').val('');
     $('#to').val('');

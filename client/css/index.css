@@ -81,7 +81,7 @@ input:valid {
 }
 .btn {
   background-color: #ECE641 !important;
-  color: #1F1E62;
+  color: #1F1E62 !important;
   font-family: 'Eater', cursive !important;
 }
 .container {
