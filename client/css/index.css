@@ -34,6 +34,7 @@ h1 {
 .login-form {
   color: #ECE641 !important;
   font-family: 'Oswald', sans-serif !important;
+  width: 400px;
 }
 input:invalid {
   border: 2px dashed red !important;
@@ -46,6 +47,32 @@ input:valid {
   color: #1F1E62;
   font-family: 'Eater', cursive !important;
 }
+.container {
+  display: flex;
+  flex-flow: column wrap;
+}
+.container,
+.welcomeRow,
+.chatRow {
+  width: 1000px;
+}
+.welcomeRow p {
+  color: #ECE641 !important;
+  font-family: 'Oswald', sans-serif !important;
+}
+.welcomeRow {
+  text-align: center;
+}
+.conversationsList {
+  border: 1px solid #ECE641 !important;
+  height: 600px;
+  width: 400px;
+}
+.chatBox {
+  border: 1px solid #ECE641 !important;
+  height: 600px;
+  width: 600px;
+}
 h1 {
   font-family: 'Eater', cursive !important;
   color: #ECE641 !important;
@@ -53,4 +80,5 @@ h1 {
 .signup-form {
   color: #ECE641 !important;
   font-family: 'Oswald', sans-serif !important;
+  width: 400px;
 }
