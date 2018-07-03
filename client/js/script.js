@@ -11,7 +11,8 @@ socket.on('connect', () => {
     .on('invitation to join', onInvitationToJoin)
     .on('online users update', onUserUpdate)
     .on('new participant', onParticipantUpdate)
-    .on('message', console.log)
+    .on('message', onMessage)
+    .on('role update', onRoleUpdate)
     .on('error', console.log);
 });
 
@@ -31,6 +32,7 @@ $(function() {
   });
 
   sendEvent('get online users', list => {
+    $('#onlineusers').empty();
     list.forEach(user => {
       $('#onlineusers').append(`<p>${user}</p>`);
     });
@@ -54,6 +56,20 @@ $(function() {
     $('#memberInvite').val('');
   });
 
+  $('#sendMessages').on('submit', function(e) {
+    e.preventDefault();
+    let recepients = $('#to')
+      .val()
+      .split(',');
+    console.log(recepients);
+    if (recepients === '') recepients = undefined;
+    sendEvent('message', { recepients, message: $('#message').val() });
+    $('#message').val('');
+    $('#to').val('');
+  });
+
+  $('#startGame').click(() => sendEvent('assign roles'));
+
   $.get({
     url: '/api/profileInfo',
     headers: {
@@ -75,11 +91,25 @@ function onInvitationToJoin({ gameId, from }) {
 }
 
 function onUserUpdate(list) {
+  $('#onlineusers').empty();
   list.forEach(user => {
-    $('#onlineusesr').append(`<p>${user}</p>`);
+    $('#onlineusers').append(`<p>${user}</p>`);
   });
 }
 
 function onParticipantUpdate(list) {
   $('#participants').text(`${list}`);
+}
+
+function onMessage(data) {
+  console.log(data);
+  let chatBox = $('#chatbox');
+  $(`<p>`)
+    .text(`${data.from}: ${data.message}`)
+    .appendTo(chatBox);
+  chatBox.scrollTop(chatBox.attr('scrollHeight'));
+}
+
+function onRoleUpdate(role) {
+  $('#role').text(`You are a ${role}`);
 }

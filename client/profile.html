@@ -39,6 +39,11 @@
       color: #1F1E62;
       font-family: 'Eater', cursive;
     }
+
+    #conversationList,
+    #chatBox {
+      overflow-y: scroll;
+    }
   </style>
 </head>
 
@@ -49,6 +54,7 @@
       <div class="col-12">
         <h1 id="WelcomeTitle">Welcome</h1>
         <h2 id="name"></h2>
+        <h3 id="role"></h3>
         <p>Here you will communicate with your teammates and cast your vote</p>
       </div>
     </div>
@@ -85,11 +91,18 @@
           <!-- <button data-id="angoansd" class="btn">Join ashwin</button> -->
         </div>
       </div>
-      <div class="col-8">
+      <div class="col-8 d-flex flex-column" style="height: 100%;">
 
-        <div id="chatbox">
-
+        <div id="chatbox" class="flex-grow-1">
+          <h2>Messages</h2>
         </div>
+        <form class="py-2" id="sendMessages">
+          <div class="d-flex">
+            <button type="submit" class="btn mr-2">Send Message</button>
+            <input type="text" class="form-control mr-2" style="width: auto;" id="to" placeholder="To (leave blank for room)">
+            <input type="text" class="form-control flex-grow-1" id="message" placeholder="Type your message">
+          </div>
+        </form>
       </div>
     </div>
     <div class="row bg-success"></div>

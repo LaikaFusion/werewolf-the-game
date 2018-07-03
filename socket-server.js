@@ -82,22 +82,48 @@ function socketServer(io) {
       });
 
       socket.on('message', ({ recepients, message }) => {
+        console.log(recepients, message);
         if (!recepients) {
-          io.to(users[socket.username].currentGame).emit('message', message);
+          io.to(users[socket.username].currentGame).emit('message', {
+            message,
+            from: socket.username
+          });
         } else {
           recepients.forEach(recepient => {
             let sockets = users[recepient].sockets;
             sockets.forEach(sock => {
-              io.to(sock).emit('message', message);
+              io.to(socket.id)
+                .to(sock)
+                .emit('message', { message, from: socket.username });
             });
           });
         }
       });
 
       socket.on('assign roles', () => {
-        let gameId = users[socket.username].currentGame;
-        let gameObj = games.find(game => game.id === gameId).game;
-        gameObj.assignRolesToMembers();
+        let gameObj = users[socket.username].currentGame;
+        gameObj.game.assignRolesToMembers();
+        gameObj.game.memberList.forEach(member => {
+          let username = member.name;
+          let sockets = users[username].sockets;
+          if (member.isWerewolf) {
+            sockets.forEach(sock => {
+              io.to(sock).emit('role update', 'Werewolf');
+            });
+          } else if (member.isDoctor) {
+            sockets.forEach(sock => {
+              io.to(sock).emit('role update', 'Doctor');
+            });
+          } else if (member.isSeer) {
+            sockets.forEach(sock => {
+              io.to(sock).emit('role update', 'Seer');
+            });
+          } else {
+            sockets.forEach(sock => {
+              io.to(sock).emit('role update', 'Villager');
+            });
+          }
+        });
         console.log(gameObj);
       });
 
