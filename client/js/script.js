@@ -13,6 +13,7 @@ socket.on('connect', () => {
     .on('new participant', onParticipantUpdate)
     .on('message', onMessage)
     .on('role update', onRoleUpdate)
+    .on('choose victim', chooseVictim)
     .on('error', console.log);
 });
 
@@ -112,4 +113,21 @@ function onMessage(data) {
 
 function onRoleUpdate(role) {
   $('#role').text(`You are a ${role}`);
+}
+
+function chooseVictim(list) {
+  let messageBox = $('#chatbox');
+  list.forEach(villager => {
+    let newDiv = $('<div>');
+    newDiv.append(`<p>${villager.name}</p>`);
+    let killBtn = $('<button>')
+      .addClass('btn')
+      .text('Kill');
+    killBtn.click(() => {
+      sendEvent('victimize', villager.name);
+      killBtn.off('click');
+    });
+    newDiv.append(killBtn);
+    newDiv.appendTo(messageBox);
+  });
 }

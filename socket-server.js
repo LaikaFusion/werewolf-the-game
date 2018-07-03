@@ -103,12 +103,16 @@ function socketServer(io) {
       socket.on('assign roles', () => {
         let gameObj = users[socket.username].currentGame;
         gameObj.game.assignRolesToMembers();
-        gameObj.game.memberList.forEach(member => {
+        gameObj.game.memberList.forEach((member, i, list) => {
           let username = member.name;
           let sockets = users[username].sockets;
           if (member.isWerewolf) {
             sockets.forEach(sock => {
               io.to(sock).emit('role update', 'Werewolf');
+              io.to(sock).emit(
+                'choose victim',
+                list.filter(member => !member.isWerewolf)
+              );
             });
           } else if (member.isDoctor) {
             sockets.forEach(sock => {
@@ -142,9 +146,17 @@ function socketServer(io) {
       });
 
       socket.on('victimize', victim => {
+        let newGame = users[socket.username].currentGame.game;
         let killed = newGame.chooseVictim(victim);
         if (killed) console.log(`${victim} was devoured`);
         else console.log(`${victim} has survived the attack`);
+        let sockets = users[victim].sockets;
+        sockets.forEach(sock => {
+          io.to(sock).emit('message', {
+            from: 'god',
+            message: 'you have fallen prey to a werewolf'
+          });
+        });
         console.log(newGame.memberList);
       });
 
