@@ -78,6 +78,19 @@ function socketServer(io) {
         console.log(users);
       });
 
+      socket.on('message', ({ recepients, message }) => {
+        if (!recepients) {
+          io.to(users[socket.username].currentGame).emit('message', message);
+        } else {
+          recepients.forEach(recepient => {
+            let sockets = users[recepient].sockets;
+            sockets.forEach(sock => {
+              io.to(sock).emit('message', message);
+            });
+          });
+        }
+      });
+
       socket.on('assign roles', () => {
         newGame.assignRolesToMembers();
         console.log(newGame.memberList);
